@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Query>
+<CmdType>RecordInfo</CmdType>
+<SN>17430</SN>
+<DeviceID>34020000001310000001</DeviceID>
+<StartTime>2017-07-05T00:46:17</StartTime>
+<EndTime>2017-07-05T23:46:17</EndTime>
+<FilePath>64010000002100000001</FilePath>
+<Address>Address1</Address>
+<Secrecy>0</Secrecy>
+<Type>time</Type>
+<RecorderID>64010000003000000001</RecorderID>
+</Query>
+
