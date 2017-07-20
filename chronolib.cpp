@@ -45,7 +45,7 @@ void ChronoLib::TestLib()
     time_t stime = std::mktime(&stimeinfo);
     system_clock::time_point stimepoint = system_clock::from_time_t(stime);
     system_clock::duration sduration = stimepoint.time_since_epoch();
-    long scount = sduration.count() * system_clock::period::num / system_clock::period::den;
+    long scount = sduration.count() * system_clock::period::num / system_clock::period::den; // scount = stime
 
     sscanf(endtime.data(), "%d-%d-%dT%d:%d:%d", &nyear, &nmon, &nday, &nhou, &nmin, &nsec);
     std::tm etimeinfo;
@@ -58,7 +58,7 @@ void ChronoLib::TestLib()
     time_t etime = std::mktime(&etimeinfo);
     system_clock::time_point etimepoint = system_clock::from_time_t(etime);
     system_clock::duration eduration = etimepoint.time_since_epoch();
-    long ecount = eduration.count() * system_clock::period::num / system_clock::period::den;
+    long ecount = eduration.count() * system_clock::period::num / system_clock::period::den; // ecount = etime
 
     cout << "ChronoLib::TestLib--scount=" << scount << ";ecount=" << ecount << endl;
 
@@ -71,7 +71,7 @@ void ChronoLib::TestLib()
         {
             tableName.clear();
             memset(buf, 0, sizeof(buf));
-            chrono::hours oneday(i);
+            chrono::hours oneday(i*24);
             system_clock::time_point itimepoint = stimepoint + oneday;
             time_t itime = system_clock::to_time_t(itimepoint);
             std::tm *itimeinfo = std::localtime(&itime);
@@ -92,4 +92,42 @@ void ChronoLib::TestLib()
     std::tm *vtimeinfo = std::localtime(&vtime);
     std::strftime(buffer, 30, "%FT%T", vtimeinfo);
     cout << "ChronoLib::TestLib--buf: " << buffer << endl;
+}
+
+bool ChronoLib::GetTimeAsString(string &strtime, string strformat, long timestamp)
+{
+    if(timestamp == -1)
+    {
+        timestamp = std::time(nullptr);
+    }
+
+    char buffer[30];
+    memset(buffer, 0, sizeof(buffer));
+
+    chrono::seconds cseconds(timestamp);
+    system_clock::time_point sctimepoint(cseconds);
+    time_t ttime = system_clock::to_time_t(sctimepoint);
+    std::tm *ptm = std::localtime(&ttime);
+    std::strftime(buffer, 30, strformat.data(), ptm);
+
+    strtime = string(buffer);
+    cout << "BMIUtilities::GetTimeAsString--strtime=" << strtime << endl;
+    return true;
+}
+
+bool ChronoLib::GetTimeFromString(string strtime, long &timestamp)
+{
+    int nyear, nmon, nday, nhou, nmin, nsec;
+
+    sscanf(strtime.data(), "%d-%d-%dT%d:%d:%d", &nyear, &nmon, &nday, &nhou, &nmin, &nsec);
+    std::tm stimeinfo;
+    stimeinfo.tm_year = nyear-1900;
+    stimeinfo.tm_mon = nmon-1;
+    stimeinfo.tm_mday = nday;
+    stimeinfo.tm_hour = nhou;
+    stimeinfo.tm_min = nmin;
+    stimeinfo.tm_sec = nsec;
+
+    timestamp = std::mktime(&stimeinfo);
+    return true;
 }
