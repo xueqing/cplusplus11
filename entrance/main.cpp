@@ -9,8 +9,8 @@ using namespace std;
 
 int main()
 {
-//    ChronoLib lib;
-    ThreadLib lib;
+    ChronoLib clib;
+    ThreadLib tlib;
 
     return 0;
 }
