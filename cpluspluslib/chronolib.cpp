@@ -16,6 +16,7 @@ using namespace boost::property_tree;
 ChronoLib::ChronoLib()
 {
     TestLib();
+    WaitSeconds(10);
 }
 
 void ChronoLib::TestLib()
@@ -75,8 +76,9 @@ bool ChronoLib::GetTimeAsString(string &strtime, string strformat, long timestam
     chrono::seconds cseconds(timestamp);
     system_clock::time_point sctimepoint(cseconds);
     time_t ttime = system_clock::to_time_t(sctimepoint);
-    std::tm *ptm = std::localtime(&ttime);
-    std::strftime(buffer, 30, strformat.data(), ptm);
+    std::tm tmres;
+    localtime_r(&ttime, &tmres);
+    std::strftime(buffer, 30, strformat.data(), &tmres);
 
     strtime = string(buffer);
     cout << "BMIUtilities::GetTimeAsString--strtime=" << strtime << endl;
@@ -98,4 +100,12 @@ bool ChronoLib::GetTimeFromString(string strtime, long &timestamp)
 
     timestamp = std::mktime(&stimeinfo);
     return true;
+}
+
+void ChronoLib::WaitSeconds(int nSec)
+{
+    cout << "ChronoLib::WaitSeconds--timestamp=" << std::time(nullptr) << endl;
+    unique_lock<mutex> locker(m_mutexCond);
+    while(m_cond.wait_for(locker, chrono::seconds(nSec)) != cv_status::timeout);
+    cout << "ChronoLib::WaitSeconds--timestamp=" << std::time(nullptr) << endl;
 }
