@@ -15,8 +15,12 @@ unix
 
 SOURCES += \
     chronolib.cpp \
-    threadlib.cpp
+    threadlib.cpp \
+    functionallib.cpp \
+    algorithmlib.cpp
 
 HEADERS += \
     chronolib.h \
-    threadlib.h
+    threadlib.h \
+    functionallib.h \
+    algorithmlib.h
