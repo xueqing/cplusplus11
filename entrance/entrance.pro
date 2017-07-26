@@ -34,7 +34,7 @@ LIBS += \
 # -lpthread add '-lpthread' for the last COLLECT_GCC_OPTIONS
 
 # [compiling]-pthread vs [linking]-pthread
-# [compiling]-pthread add every definition twice as long as [linking]-pthread
+# same for micro defination
 
 # -pthreads (listed as a synonym for -pthread on Solaris 2)
 # -mthread (for MinGW-specific thread support on i386 and x86-64 Windows)
