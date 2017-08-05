@@ -4,6 +4,7 @@
 #include <iostream>
 #include <time.h>
 #include <chrono>
+#include <mutex>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
@@ -60,7 +61,7 @@ void ChronoLib::TestLib()
     long timestamp = 1499258297;
     string stimetamsp;
     GetTimeAsString(stimetamsp, "%FT%T", timestamp);
-    cout << "ChronoLib::TestLib--stimetamsp=" << stimetamsp << endl;
+    cout << "ChronoLib::TestLib--stimestamp=" << stimetamsp << endl;
 }
 
 bool ChronoLib::GetTimeAsString(string &strtime, string strformat, long timestamp)
@@ -105,7 +106,8 @@ bool ChronoLib::GetTimeFromString(string strtime, long &timestamp)
 void ChronoLib::WaitSeconds(int nSec)
 {
     cout << "ChronoLib::WaitSeconds--timestamp=" << std::time(nullptr) << endl;
-    unique_lock<mutex> locker(m_mutexCond);
-    while(m_cond.wait_for(locker, chrono::seconds(nSec)) != cv_status::timeout);
+    mutex mut;
+    unique_lock<mutex> locker(mut);
+    m_cond.wait_for(locker, chrono::seconds(nSec));
     cout << "ChronoLib::WaitSeconds--timestamp=" << std::time(nullptr) << endl;
 }

@@ -2,7 +2,6 @@
 #define CHRONOLIB_H
 
 #include <string>
-#include <mutex>
 #include <condition_variable>
 
 class ChronoLib
@@ -11,7 +10,6 @@ public:
     ChronoLib();
 
 private:
-    std::mutex m_mutexCond;
     std::condition_variable m_cond;
 
     void TestLib();
