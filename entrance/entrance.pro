@@ -5,6 +5,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += \
+    $$PWD/../openlib \
     $$PWD/../cpluspluslib
 
 unix
@@ -21,6 +22,7 @@ unix
 SOURCES += main.cpp
 
 LIBS += \
+    -ltinyxmllib \
     -lcpluspluslib \
     -pthread
 
