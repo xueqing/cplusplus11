@@ -67,13 +67,20 @@ namespace MyTinyXML {
     bool SaveFile(TiXmlDocument *doc, const char * filename);
     bool LoadFile(TiXmlDocument *doc, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING);
     bool LoadFile(const char * filename);
+    const char* Parse(TiXmlDocument *doc, const char* p, TiXmlParsingData* data = 0, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING);
 
     TiXmlNode* LinkEndChild(TiXmlNode* addTo, TiXmlNode* addThis);
+    TiXmlNode* FirstChild(TiXmlElement* node);
+    TiXmlNode* FirstChild(TiXmlElement* node, const char * _value);
+    TiXmlNode* NextSibling(TiXmlNode *node);
     TiXmlElement* FirstChildElement(TiXmlElement* node);
+    TiXmlElement* FirstChildElement(TiXmlElement* node, const char * _value);
     TiXmlElement* RootElement(TiXmlDocument* doc);
     TiXmlElement *NextSiblingElement(TiXmlElement* node);
     TiXmlAttribute* FirstAttribute(TiXmlElement* node);
-};
+
+    const char* GetText(TiXmlElement* node);
+} //namespace MyTinyXML
 
 class TinyXMLTest
 {
@@ -86,6 +93,10 @@ private:
 
     bool WriteXmlFile(std::string filename);
     bool ReadXmlFile(std::string filename);
+
+    bool ParseXmlBody();
+    bool ParseXmlBody(TiXmlDocument *doc);
+    bool ParseXmlBody(const char *pbody);
 };
 
 #endif // TINYXMLTEST_H
