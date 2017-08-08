@@ -63,16 +63,8 @@ struct SipServer
     int serverPort;
 };
 
-class TinyXMLTest
-{
-public:
-    TinyXMLTest();
-    ~TinyXMLTest();
-
-private:
-    void TestLib();
-
-    bool SaveFile(TiXmlDocument *doc, const char * filename) const;
+namespace MyTinyXML {
+    bool SaveFile(TiXmlDocument *doc, const char * filename);
     bool LoadFile(TiXmlDocument *doc, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING);
     bool LoadFile(const char * filename);
 
@@ -81,6 +73,16 @@ private:
     TiXmlElement* RootElement(TiXmlDocument* doc);
     TiXmlElement *NextSiblingElement(TiXmlElement* node);
     TiXmlAttribute* FirstAttribute(TiXmlElement* node);
+};
+
+class TinyXMLTest
+{
+public:
+    TinyXMLTest();
+    ~TinyXMLTest();
+
+private:
+    void TestLib();
 
     bool WriteXmlFile(std::string filename);
     bool ReadXmlFile(std::string filename);

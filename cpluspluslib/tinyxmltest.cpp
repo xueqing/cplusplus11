@@ -10,6 +10,73 @@
 
 using namespace std;
 
+bool MyTinyXML::SaveFile(TiXmlDocument *doc, const char *filename)
+{
+    if(nullptr == doc || !doc->SaveFile(filename))
+    {
+        cerr << "MyTinyXML::SaveFile " << filename << " failed!" << endl;
+        return false;
+    }
+    return true;
+}
+
+bool MyTinyXML::LoadFile(TiXmlDocument *doc, TiXmlEncoding encoding)
+{
+    if(nullptr == doc || !doc->LoadFile(encoding))
+    {
+        cerr << "MyTinyXML::LoadFile failed!" << endl;
+        return false;
+    }
+    return true;
+}
+
+bool MyTinyXML::LoadFile(const char *filename)
+{
+    TiXmlDocument *doc = new TiXmlDocument(filename); //create a XML DOC object
+    return LoadFile(doc);
+}
+
+TiXmlNode *MyTinyXML::LinkEndChild(TiXmlNode *addTo, TiXmlNode *addThis)
+{
+    TiXmlNode *node = addTo->LinkEndChild(addThis);
+    if(nullptr == node)
+        throw std::bad_exception();
+    return node;
+}
+
+TiXmlElement *MyTinyXML::FirstChildElement(TiXmlElement *node)
+{
+    if(nullptr == node)
+        throw std::bad_exception();
+    return node->FirstChildElement();
+}
+
+TiXmlElement *MyTinyXML::RootElement(TiXmlDocument *doc)
+{
+    TiXmlElement *root = doc->RootElement();
+    if(nullptr == root)
+        throw std::bad_exception();
+    return root;
+}
+
+TiXmlElement *MyTinyXML::NextSiblingElement(TiXmlElement *node)
+{
+    TiXmlElement *sib = node->NextSiblingElement();
+    if(nullptr == sib)
+        throw std::bad_exception();
+    return sib;
+}
+
+TiXmlAttribute *MyTinyXML::FirstAttribute(TiXmlElement *node)
+{
+    TiXmlAttribute *attr = node->FirstAttribute();
+    if(nullptr == attr)
+        throw std::bad_exception();
+    return attr;
+}
+
+using namespace MyTinyXML;
+
 TinyXMLTest::TinyXMLTest()
 {
     TestLib();
@@ -25,76 +92,6 @@ void TinyXMLTest::TestLib()
     string filename("./ewardsipconfig.xml");
     WriteXmlFile(filename);
     ReadXmlFile(filename);
-}
-
-bool TinyXMLTest::SaveFile(TiXmlDocument *doc, const char *filename) const
-{
-    if(nullptr == doc || !doc->SaveFile(filename))
-    {
-        cerr << "TinyXMLTest::SaveFile " << filename << " failed!" << endl;
-        return false;
-    }
-    return true;
-}
-
-bool TinyXMLTest::LoadFile(TiXmlDocument *doc, TiXmlEncoding encoding)
-{
-    if(!doc->LoadFile(encoding))
-    {
-        cerr << "TinyXMLTest::LoadFile failed!" << endl;
-        return false;
-    }
-    return true;
-}
-
-bool TinyXMLTest::LoadFile(const char *filename)
-{
-    TiXmlDocument *doc = new TiXmlDocument(filename); //create a XML DOC object
-    if(nullptr == doc || !doc->LoadFile())
-    {
-        cerr << "TinyXMLTest::ReadXmlFile--LoadFile " << filename << " failed!" << endl;
-        return false;
-    }
-    return true;
-}
-
-TiXmlNode *TinyXMLTest::LinkEndChild(TiXmlNode *addTo, TiXmlNode *addThis)
-{
-    TiXmlNode *node = addTo->LinkEndChild(addThis);
-    if(nullptr == node)
-        throw std::bad_exception();
-    return node;
-}
-
-TiXmlElement *TinyXMLTest::FirstChildElement(TiXmlElement *node)
-{
-    if(nullptr == node)
-        throw std::bad_exception();
-    return node->FirstChildElement();
-}
-
-TiXmlElement *TinyXMLTest::RootElement(TiXmlDocument *doc)
-{
-    TiXmlElement *root = doc->RootElement();
-    if(nullptr == root)
-        throw std::bad_exception();
-    return root;
-}
-
-TiXmlElement *TinyXMLTest::NextSiblingElement(TiXmlElement *node)
-{
-    TiXmlElement *sib = node->NextSiblingElement();
-    if(nullptr == sib)
-        throw std::bad_exception();
-    return sib;
-}
-
-TiXmlAttribute *TinyXMLTest::FirstAttribute(TiXmlElement *node)
-{
-    TiXmlAttribute *attr = node->FirstAttribute();
-    if(nullptr == attr)
-        throw std::bad_exception();
-    return attr;
 }
 
 bool TinyXMLTest::WriteXmlFile(string filename)
@@ -175,15 +172,11 @@ bool TinyXMLTest::WriteXmlFile(string filename)
         TiXmlText *channelidtext2 = new TiXmlText("34020000001310000002");
         LinkEndChild(channelidelem2, channelidtext2);
 
-        if(!doc->SaveFile(filename.c_str()))
-        {
-            cerr << "TinyXMLTest::WriteXmlFile--SaveFile " << filename << " failed!" << endl;
-            return false;
-        }
+        return SaveFile(doc, filename.c_str());
     }
-    catch(...)
+    catch(bad_exception& err)
     {
-        cerr << "TinyXMLTest::WriteXmlFile--catch exception, filename is " << filename << endl;
+        cerr << "err is " << err.what() << endl;
         return false;
     }
     return true;
@@ -194,13 +187,12 @@ bool TinyXMLTest::ReadXmlFile(string filename)
     try
     {
         TiXmlDocument *doc = new TiXmlDocument(filename.c_str()); //create a XML DOC object
-        if(!doc || !doc->LoadFile())
+        if(!LoadFile(doc))
         {
-            cerr << "TinyXMLTest::ReadXmlFile--LoadFile " << filename << " failed!" << endl;
             return false;
         }
 //        doc->Print(); //print document content
-        TiXmlElement *rootelem = doc->RootElement(); //get root element
+        TiXmlElement *rootelem = RootElement(doc); //get root element
         cout << rootelem->Value() << endl; //root element name
 
         TiXmlElement *clientelem = FirstChildElement(rootelem); //get client element, namely first child
