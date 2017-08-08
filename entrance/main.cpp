@@ -6,6 +6,7 @@
 #include "threadlib.h"
 #include "functionallib.h"
 #include "algorithmlib.h"
+#include "threadpool.h"
 #include "tinyxmltest.h"
 
 using namespace std;
@@ -17,7 +18,8 @@ int main()
 //    FunctionalLib flib;
 //    AlgorithmLib alib;
 
-    TinyXMLTest test;
+    ThreadPoolTest test;
+//    TinyXMLTest test;
 
     return 0;
 }

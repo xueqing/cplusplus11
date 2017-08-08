@@ -27,6 +27,7 @@ SOURCES += \
     threadlib.cpp \
     functionallib.cpp \
     algorithmlib.cpp \
+    threadpool.cpp \
     tinyxmltest.cpp
 
 HEADERS += \
@@ -34,4 +35,5 @@ HEADERS += \
     threadlib.h \
     functionallib.h \
     algorithmlib.h \
+    threadpool.h \
     tinyxmltest.h
