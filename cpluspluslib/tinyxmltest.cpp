@@ -27,18 +27,88 @@ void TinyXMLTest::TestLib()
     ReadXmlFile(filename);
 }
 
+bool TinyXMLTest::SaveFile(TiXmlDocument *doc, const char *filename) const
+{
+    if(nullptr == doc || !doc->SaveFile(filename))
+    {
+        cerr << "TinyXMLTest::SaveFile " << filename << " failed!" << endl;
+        return false;
+    }
+    return true;
+}
+
+bool TinyXMLTest::LoadFile(TiXmlDocument *doc, TiXmlEncoding encoding)
+{
+    if(!doc->LoadFile(encoding))
+    {
+        cerr << "TinyXMLTest::LoadFile failed!" << endl;
+        return false;
+    }
+    return true;
+}
+
+bool TinyXMLTest::LoadFile(const char *filename)
+{
+    TiXmlDocument *doc = new TiXmlDocument(filename); //create a XML DOC object
+    if(nullptr == doc || !doc->LoadFile())
+    {
+        cerr << "TinyXMLTest::ReadXmlFile--LoadFile " << filename << " failed!" << endl;
+        return false;
+    }
+    return true;
+}
+
+TiXmlNode *TinyXMLTest::LinkEndChild(TiXmlNode *addTo, TiXmlNode *addThis)
+{
+    TiXmlNode *node = addTo->LinkEndChild(addThis);
+    if(nullptr == node)
+        throw std::bad_exception();
+    return node;
+}
+
+TiXmlElement *TinyXMLTest::FirstChildElement(TiXmlElement *node)
+{
+    if(nullptr == node)
+        throw std::bad_exception();
+    return node->FirstChildElement();
+}
+
+TiXmlElement *TinyXMLTest::RootElement(TiXmlDocument *doc)
+{
+    TiXmlElement *root = doc->RootElement();
+    if(nullptr == root)
+        throw std::bad_exception();
+    return root;
+}
+
+TiXmlElement *TinyXMLTest::NextSiblingElement(TiXmlElement *node)
+{
+    TiXmlElement *sib = node->NextSiblingElement();
+    if(nullptr == sib)
+        throw std::bad_exception();
+    return sib;
+}
+
+TiXmlAttribute *TinyXMLTest::FirstAttribute(TiXmlElement *node)
+{
+    TiXmlAttribute *attr = node->FirstAttribute();
+    if(nullptr == attr)
+        throw std::bad_exception();
+    return attr;
+}
+
 bool TinyXMLTest::WriteXmlFile(string filename)
 {
     try
     {
         TiXmlDocument *doc = new TiXmlDocument; //create a XML DOC object
         TiXmlDeclaration *dec = new TiXmlDeclaration("1.0", "", "");
-        doc->LinkEndChild(dec);
+        LinkEndChild(doc, dec);
         TiXmlElement *rootelem = new TiXmlElement("GbsipConfig"); //create a root element
-        doc->LinkEndChild(rootelem); //create link
+        LinkEndChild(doc, rootelem); //create link
 
         TiXmlElement *clientelem = new TiXmlElement("Client"); //create a child element and link it to root element
-        rootelem->LinkEndChild(clientelem);
+        LinkEndChild(rootelem, clientelem);
         TiXmlElement *localipelem = new TiXmlElement("localip");//create other element and link them to client element
         TiXmlElement *localportelem = new TiXmlElement("localport");
         TiXmlElement *serveridelem = new TiXmlElement("serverid");
@@ -51,18 +121,18 @@ bool TinyXMLTest::WriteXmlFile(string filename)
         TiXmlElement *heartcycleelem = new TiXmlElement("heartcycle");
         TiXmlElement *hearttimeoutelem = new TiXmlElement("hearttimeout");
         TiXmlElement *intervalelem = new TiXmlElement("interval");
-        clientelem->LinkEndChild(localipelem);
-        clientelem->LinkEndChild(localportelem);
-        clientelem->LinkEndChild(serveridelem);
-        clientelem->LinkEndChild(serverdomainelem);
-        clientelem->LinkEndChild(serveripelem);
-        clientelem->LinkEndChild(serverportelem);
-        clientelem->LinkEndChild(userauthidelem);
-        clientelem->LinkEndChild(userauthpasswordelem);
-        clientelem->LinkEndChild(registerperiodelem);
-        clientelem->LinkEndChild(heartcycleelem);
-        clientelem->LinkEndChild(hearttimeoutelem);
-        clientelem->LinkEndChild(intervalelem);
+        LinkEndChild(clientelem, localipelem);
+        LinkEndChild(clientelem, localportelem);
+        LinkEndChild(clientelem, serveridelem);
+        LinkEndChild(clientelem, serverdomainelem);
+        LinkEndChild(clientelem, serveripelem);
+        LinkEndChild(clientelem, serverportelem);
+        LinkEndChild(clientelem, userauthidelem);
+        LinkEndChild(clientelem, userauthpasswordelem);
+        LinkEndChild(clientelem, registerperiodelem);
+        LinkEndChild(clientelem, heartcycleelem);
+        LinkEndChild(clientelem, hearttimeoutelem);
+        LinkEndChild(clientelem, intervalelem);
 
         TiXmlText *localiptext = new TiXmlText("localhost");//set content for elements
         TiXmlText *localporttext = new TiXmlText("5062");
@@ -76,34 +146,34 @@ bool TinyXMLTest::WriteXmlFile(string filename)
         TiXmlText *heartcycletext = new TiXmlText("20");
         TiXmlText *hearttimeouttext = new TiXmlText("3");
         TiXmlText *intervaltext = new TiXmlText("10");
-        localipelem->LinkEndChild(localiptext);
-        localportelem->LinkEndChild(localporttext);
-        serveridelem->LinkEndChild(serveridtext);
-        serverdomainelem->LinkEndChild(serverdomaintext);
-        serveripelem->LinkEndChild(serveriptext);
-        serverportelem->LinkEndChild(serverporttext);
-        userauthidelem->LinkEndChild(userauthidtext);
-        userauthpasswordelem->LinkEndChild(userauthpasswordtext);
-        registerperiodelem->LinkEndChild(registerperiodtext);
-        heartcycleelem->LinkEndChild(heartcycletext);
-        hearttimeoutelem->LinkEndChild(hearttimeouttext);
-        intervalelem->LinkEndChild(intervaltext);
+        LinkEndChild(localipelem, localiptext);
+        LinkEndChild(localportelem, localporttext);
+        LinkEndChild(serveridelem, serveridtext);
+        LinkEndChild(serverdomainelem, serverdomaintext);
+        LinkEndChild(serveripelem, serveriptext);
+        LinkEndChild(serverportelem, serverporttext);
+        LinkEndChild(userauthidelem, userauthidtext);
+        LinkEndChild(userauthpasswordelem, userauthpasswordtext);
+        LinkEndChild(registerperiodelem, registerperiodtext);
+        LinkEndChild(heartcycleelem, heartcycletext);
+        LinkEndChild(hearttimeoutelem, hearttimeouttext);
+        LinkEndChild(intervalelem, intervaltext);
 
         TiXmlElement *childelem = new TiXmlElement("sipchannel"); //create a child element
-        clientelem->LinkEndChild(childelem); //create link
+        LinkEndChild(clientelem, childelem); //create link
         childelem->SetAttribute("ID", "1"); //set attribute
         TiXmlElement *channelidelem = new TiXmlElement("channelid");
-        childelem->LinkEndChild(channelidelem);
+        LinkEndChild(childelem, channelidelem);
         TiXmlText *channelidtext = new TiXmlText("34020000001310000001");
-        channelidelem->LinkEndChild(channelidtext);
+        LinkEndChild(channelidelem, channelidtext);
 
         TiXmlElement *childelem2 = new TiXmlElement("sipchannel"); //create a child element
-        clientelem->LinkEndChild(childelem2); //create link
+        LinkEndChild(clientelem, childelem2); //create link
         childelem2->SetAttribute("ID", "2"); //set attribute
         TiXmlElement *channelidelem2 = new TiXmlElement("channelid");
-        childelem2->LinkEndChild(channelidelem2);
+        LinkEndChild(childelem2, channelidelem2);
         TiXmlText *channelidtext2 = new TiXmlText("34020000001310000002");
-        channelidelem2->LinkEndChild(channelidtext2);
+        LinkEndChild(channelidelem2, channelidtext2);
 
         if(!doc->SaveFile(filename.c_str()))
         {
@@ -124,7 +194,7 @@ bool TinyXMLTest::ReadXmlFile(string filename)
     try
     {
         TiXmlDocument *doc = new TiXmlDocument(filename.c_str()); //create a XML DOC object
-        if(!doc->LoadFile())
+        if(!doc || !doc->LoadFile())
         {
             cerr << "TinyXMLTest::ReadXmlFile--LoadFile " << filename << " failed!" << endl;
             return false;
@@ -133,19 +203,19 @@ bool TinyXMLTest::ReadXmlFile(string filename)
         TiXmlElement *rootelem = doc->RootElement(); //get root element
         cout << rootelem->Value() << endl; //root element name
 
-        TiXmlElement *clientelem = rootelem->FirstChildElement(); //get client element, namely first child
-        TiXmlElement *localipelem = clientelem->FirstChildElement();
-        TiXmlElement *localportelem = localipelem->NextSiblingElement();
-        TiXmlElement *serveridelem = localportelem->NextSiblingElement();
-        TiXmlElement *serverdomainelem = serveridelem->NextSiblingElement();
-        TiXmlElement *serveripelem = serverdomainelem->NextSiblingElement();
-        TiXmlElement *serverportelem = serveripelem->NextSiblingElement();
-        TiXmlElement *userauthidelem = serverportelem->NextSiblingElement();
-        TiXmlElement *userauthpasswordelem = userauthidelem->NextSiblingElement();
-        TiXmlElement *registerperiodelem = userauthpasswordelem->NextSiblingElement();
-        TiXmlElement *heartcycleelem = registerperiodelem->NextSiblingElement();
-        TiXmlElement *hearttimeoutelem = heartcycleelem->NextSiblingElement();
-        TiXmlElement *intervalelem = hearttimeoutelem->NextSiblingElement();
+        TiXmlElement *clientelem = FirstChildElement(rootelem); //get client element, namely first child
+        TiXmlElement *localipelem = FirstChildElement(clientelem);
+        TiXmlElement *localportelem = NextSiblingElement(localipelem);
+        TiXmlElement *serveridelem = NextSiblingElement(localportelem);
+        TiXmlElement *serverdomainelem = NextSiblingElement(serveridelem);
+        TiXmlElement *serveripelem = NextSiblingElement(serverdomainelem);
+        TiXmlElement *serverportelem = NextSiblingElement(serveripelem);
+        TiXmlElement *userauthidelem = NextSiblingElement(serverportelem);
+        TiXmlElement *userauthpasswordelem = NextSiblingElement(userauthidelem);
+        TiXmlElement *registerperiodelem = NextSiblingElement(userauthpasswordelem);
+        TiXmlElement *heartcycleelem = NextSiblingElement(registerperiodelem);
+        TiXmlElement *hearttimeoutelem = NextSiblingElement(heartcycleelem);
+        TiXmlElement *intervalelem = NextSiblingElement(hearttimeoutelem);
         cout << "localip--" << localipelem->Value() << "\t" << localipelem->GetText() << endl;
         cout << "localport--" << localportelem->Value() << "\t" << localportelem->GetText() << endl;
         cout << "serverid--" << serveridelem->Value() << "\t" << serveridelem->GetText() << endl;
@@ -159,24 +229,24 @@ bool TinyXMLTest::ReadXmlFile(string filename)
         cout << "hearttimeout--" << hearttimeoutelem->Value() << "\t" << hearttimeoutelem->GetText() << endl;
         cout << "interval--" << intervalelem->Value() << "\t" << intervalelem->GetText() << endl;
 
-        TiXmlElement *childelem = intervalelem->NextSiblingElement();
-        TiXmlAttribute *channelidattr = childelem->FirstAttribute();
-        TiXmlElement *channelidelem = childelem->FirstChildElement();
+        TiXmlElement *childelem = NextSiblingElement(intervalelem);
+        TiXmlAttribute *channelidattr = FirstAttribute(childelem);
+        TiXmlElement *channelidelem = FirstChildElement(childelem);
         cout << "sipchannel_ID--" << channelidattr->Name() << "\t" << channelidattr->Value() << endl;
         cout << "sipchannel_channelid--" << channelidelem->Value() << "\t" << channelidelem->GetText() << endl;
 
-        TiXmlElement *childelem2 = childelem->NextSiblingElement();
-        TiXmlAttribute *channelidattr2 = childelem2->FirstAttribute();
-        TiXmlElement *channelidelem2 = childelem2->FirstChildElement();
+        TiXmlElement *childelem2 = NextSiblingElement(childelem);
+        TiXmlAttribute *channelidattr2 = FirstAttribute(childelem2);
+        TiXmlElement *channelidelem2 = FirstChildElement(childelem2);
         cout << "sipchannel_ID--" << channelidattr2->Name() << "\t" << channelidattr2->Value() << endl;
         cout << "sipchannel_channelid--" << channelidelem2->Value() << "\t" << channelidelem2->GetText() << endl;
 
-//        // test exception
-//        TiXmlElement *childelem3 = childelem2->NextSiblingElement();
-//        TiXmlAttribute *channelidattr3 = childelem3->FirstAttribute();
-//        TiXmlElement *channelidelem3 = childelem3->FirstChildElement();
-//        cout << "sipchannel_ID--" << channelidattr3->Name() << "\t" << channelidattr3->Value() << endl;
-//        cout << "sipchannel_channelid--" << channelidelem3->Value() << "\t" << channelidelem3->GetText() << endl;
+        // test exception
+        TiXmlElement *childelem3 = NextSiblingElement(childelem2);
+        TiXmlAttribute *channelidattr3 = FirstAttribute(childelem3);
+        TiXmlElement *channelidelem3 = FirstChildElement(childelem3);
+        cout << "sipchannel_ID--" << channelidattr3->Name() << "\t" << channelidattr3->Value() << endl;
+        cout << "sipchannel_channelid--" << channelidelem3->Value() << "\t" << channelidelem3->GetText() << endl;
 
         SipConneciton sipconn;
         SipServer sipserver;
@@ -204,7 +274,7 @@ bool TinyXMLTest::ReadXmlFile(string filename)
         sipchann.channelId = channelidelem2->GetText();
         sipchanlist.push_back(sipchann);
     }
-    catch(exception& err)
+    catch(bad_exception& err)
     {
         cerr << "TinyXMLTest::ReadXmlFile--catch exception, filename is " << filename << ";err is "  << err.what() << endl;
         return false;

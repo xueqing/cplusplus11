@@ -18,8 +18,8 @@ int main()
 //    FunctionalLib flib;
 //    AlgorithmLib alib;
 
-    ThreadPoolTest test;
-//    TinyXMLTest test;
+//    ThreadPoolTest test;
+    TinyXMLTest test;
 
     return 0;
 }
