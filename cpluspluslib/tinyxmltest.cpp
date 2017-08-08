@@ -22,7 +22,7 @@ bool MyTinyXML::SaveFile(TiXmlDocument *doc, const char *filename)
 
 bool MyTinyXML::LoadFile(TiXmlDocument *doc, TiXmlEncoding encoding)
 {
-    if(!doc->LoadFile(encoding))
+    if(nullptr == doc || !doc->LoadFile(encoding))
     {
         cerr << "MyTinyXML::LoadFile failed!" << endl;
         return false;
@@ -33,12 +33,7 @@ bool MyTinyXML::LoadFile(TiXmlDocument *doc, TiXmlEncoding encoding)
 bool MyTinyXML::LoadFile(const char *filename)
 {
     TiXmlDocument *doc = new TiXmlDocument(filename); //create a XML DOC object
-    if(nullptr == doc || !doc->LoadFile())
-    {
-        cerr << "MyTinyXML::ReadXmlFile--LoadFile " << filename << " failed!" << endl;
-        return false;
-    }
-    return true;
+    return LoadFile(doc);
 }
 
 TiXmlNode *MyTinyXML::LinkEndChild(TiXmlNode *addTo, TiXmlNode *addThis)
@@ -177,15 +172,11 @@ bool TinyXMLTest::WriteXmlFile(string filename)
         TiXmlText *channelidtext2 = new TiXmlText("34020000001310000002");
         LinkEndChild(channelidelem2, channelidtext2);
 
-        if(!doc->SaveFile(filename.c_str()))
-        {
-            cerr << "TinyXMLTest::WriteXmlFile--SaveFile " << filename << " failed!" << endl;
-            return false;
-        }
+        return SaveFile(doc, filename.c_str());
     }
-    catch(...)
+    catch(bad_exception& err)
     {
-        cerr << "TinyXMLTest::WriteXmlFile--catch exception, filename is " << filename << endl;
+        cerr << "err is " << err.what() << endl;
         return false;
     }
     return true;
@@ -196,13 +187,12 @@ bool TinyXMLTest::ReadXmlFile(string filename)
     try
     {
         TiXmlDocument *doc = new TiXmlDocument(filename.c_str()); //create a XML DOC object
-        if(!doc || !doc->LoadFile())
+        if(!LoadFile(doc))
         {
-            cerr << "TinyXMLTest::ReadXmlFile--LoadFile " << filename << " failed!" << endl;
             return false;
         }
 //        doc->Print(); //print document content
-        TiXmlElement *rootelem = doc->RootElement(); //get root element
+        TiXmlElement *rootelem = RootElement(doc); //get root element
         cout << rootelem->Value() << endl; //root element name
 
         TiXmlElement *clientelem = FirstChildElement(rootelem); //get client element, namely first child
