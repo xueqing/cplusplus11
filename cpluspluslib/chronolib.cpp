@@ -82,7 +82,7 @@ bool ChronoLib::GetTimeAsString(string &strtime, string strformat, long timestam
     std::strftime(buffer, 30, strformat.data(), &tmres);
 
     strtime = string(buffer);
-    cout << "BMIUtilities::GetTimeAsString--strtime=" << strtime << endl;
+    cout << "ChronoLib::GetTimeAsString--strtime=" << strtime << endl;
     return true;
 }
 
