@@ -8,6 +8,7 @@
 #include "algorithmlib.h"
 #include "threadpool.h"
 #include "tinyxmltest.h"
+#include "sharedptrtest.h"
 
 using namespace std;
 
@@ -19,7 +20,9 @@ int main()
 //    AlgorithmLib alib;
 
 //    ThreadPoolTest test;
-    TinyXMLTest test;
+//    TinyXMLTest test;
+
+    SharedPtrTest test;
 
     return 0;
 }

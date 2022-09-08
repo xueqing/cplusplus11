@@ -28,7 +28,8 @@ SOURCES += \
     functionallib.cpp \
     algorithmlib.cpp \
     threadpool.cpp \
-    tinyxmltest.cpp
+    tinyxmltest.cpp \
+    sharedptrtest.cpp
 
 HEADERS += \
     chronolib.h \
@@ -36,4 +37,5 @@ HEADERS += \
     functionallib.h \
     algorithmlib.h \
     threadpool.h \
-    tinyxmltest.h
+    tinyxmltest.h \
+    sharedptrtest.h
