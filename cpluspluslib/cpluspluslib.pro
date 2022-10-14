@@ -7,6 +7,9 @@ QMAKE_CXXFLAGS += -std=c++11
 INCLUDEPATH += \
     $$PWD/../openlib
 
+INCLUDEPATH += \
+    $$PWD/../depends/include
+
 unix
 {
     CONFIG(debug, debug|release) {
