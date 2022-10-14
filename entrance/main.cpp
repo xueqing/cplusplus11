@@ -9,6 +9,7 @@
 #include "threadpool.h"
 #include "tinyxmltest.h"
 #include "sharedptrtest.h"
+#include "referencetest.h"
 
 using namespace std;
 
@@ -22,7 +23,9 @@ int main()
 //    ThreadPoolTest test;
 //    TinyXMLTest test;
 
-    SharedPtrTest test;
+//    SharedPtrTest test;
+
+    ReferenceTest test;
 
     return 0;
 }
